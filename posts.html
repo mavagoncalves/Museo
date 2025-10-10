@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Museo — Posts</title>
+  <link rel="stylesheet" href="styles.css"/>
+</head>
+
+<body>
+  <div class="container">
+
+    <!-- HEADER -->
+    <header class="site-header" role="banner">
+      <a class = "brand" aria-label="Museo Home">Museo</a>
+      <nav id="main-nav" role="navigation" aria-label="Main Navigation">
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="posts.html" aria-current="page">Posts</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <!-- MAIN CONTENT -->
+     <main id="content" tabindex="-1">
+      <header aria-labelledby="posts-title">
+        <h1 id="posts-title">Posts</h1>
+        <p class="lead">Stories, spotlights, and behind-the-scenes notes from the Museo team.</p>
+      </header>
+
+      <p id="status" class="lead" aria-live="polite" style="min-height:1.5em;"></p>
+        
+        <!-- Post cards-->
+      <section id="posts-list" aria-label="All posts" style="display:grid; gap:1.25rem;"></section>
+        
+        <!-- Pagination -->
+      <nav aria-label="Posts pagination" style="margin-top:1.25rem;">
+        <ul id="pagination" style="list-style:none; display:flex; gap:.5rem; align-items:center; flex-wrap:wrap;"></ul>
+      </nav>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="site-footer">
+            <p>©Museo</p>
+    </footer>
+  </div>
+
+  <dialog id="user-profile">
+  <article>
+    <header style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem;">
+      <h2 id="user-profile-title">User Profile</h2>
+      <button id="user-profile-close"
+              style="padding:.25rem .5rem;border:1px solid var(--border);border-radius:6px;background:var(--surface);cursor:pointer;">
+        Close
+      </button>
+    </header>
+    <div id="user-profile-body" class="lead">Loading…</div>
+  </article>
+</dialog>
+
+  <script src="app.js" defer></script>
+
+</body>
+</html>
