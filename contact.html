@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Museo — Contact</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="contact.css" />
+</head>
+<body>
+  <header class="site-header" role="banner">
+      <img src="assets/logo.png" class = "brand" alt="Museo logo" />
+      <nav id="main-nav" role="navigation" aria-label="Main Navigation">
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="posts.html" aria-current="page">Posts</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+    </header>
+
+  <main class="contact-container">
+    <h1>Contact Us</h1>
+
+    <form id="contact-form" novalidate>
+      <div class="form-grid">
+        <!-- Name -->
+        <div class="form-field">
+          <label for="name">Name</label>
+          <input id="name" name="name" type="text" autocomplete="name" required aria-describedby="name-error" />
+          <p id="name-error" class="error" role="alert" aria-live="polite"></p>
+        </div>
+
+        <!-- Email -->
+        <div class="form-field">
+          <label for="email">Email</label>
+          <input id="email" name="email" type="email" autocomplete="email" required aria-describedby="email-error" />
+          <p id="email-error" class="error" role="alert" aria-live="polite"></p>
+        </div>
+
+        <!-- Message -->
+        <div class="form-field form-field--full">
+          <label for="message">Message</label>
+          <textarea id="message" name="message" rows="5" aria-describedby="message-error"></textarea>
+          <p id="message-error" class="error" role="alert" aria-live="polite"></p>
+        </div>
+
+        <!-- Confirm -->
+        <div class="form-check form-field--full">
+          <input id="confirm" type="checkbox" />
+          <label for="confirm">Confirm to send.</label>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button id="send-btn" type="submit" disabled>Send</button>
+      </div>
+
+      <p id="form-status" class="form-status" aria-live="polite"></p>
+    </form>
+  </main>
+
+  <!-- FOOTER -->
+    <footer class="site-footer">
+            <p>©Museo</p>
+    </footer>
+  </div>
+
+  <script src="app.js" defer></script>
+</body>
+</html>

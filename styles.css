@@ -189,7 +189,10 @@ article li {
 }
 
 /* ========== POSTS PAGE ========== */
-
+.post-title {
+  font-size: 4rem;
+  color: var(--primary);
+}
 /* ---------- Status line ---------- */
 #status {
   margin: 1rem 0;
@@ -202,7 +205,7 @@ article li {
 #infinite-sentinel {
   height: 1px;
   width: 100%;
-  opacity: 0.001;      /* practically invisible */
+  opacity: 0.001;
   pointer-events: none;
   user-select: none;
 }
@@ -212,7 +215,6 @@ article li {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 1.5rem;
-  margin-top: 1.5rem;
 }
 
 /* ---------- Individual post card ---------- */
@@ -343,4 +345,63 @@ button:hover {
   color: var(--muted);
 }
 
+/* ========== CONTACT PAGE ========== */
 
+.contact-container {
+  min-height: 80dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+}
+
+#contact-form {
+  width: min(720px, 92vw);
+  padding: 2rem;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: 0 6px 24px rgba(0,0,0,.06);
+  background: #fff;
+  font-size: 1.05rem;
+}
+
+.form-grid {
+  display: grid;
+  gap: 1rem 1.25rem;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 720px) {
+  .form-grid { grid-template-columns: 1fr 1fr; }
+  .form-field--full { grid-column: 1 / -1; }
+}
+
+/* fields */
+.form-field label { display:block; font-weight:600; margin-bottom:.4rem; }
+.form-field input[type="text"],
+.form-field input[type="email"],
+.form-field textarea {
+  width:100%;
+  padding:.8rem 1rem;
+  border:1px solid #d0d0d0;
+  border-radius:10px;
+  font:inherit;
+}
+.is-invalid { border-color:#e35b5b; }
+
+/* checkbox row */
+.form-check { display:flex; align-items:center; gap:.55rem; }
+
+/* feedback messages */
+.error { color:#b3261e; margin-top:.35rem; min-height:1.2rem; }
+.form-status { margin-top:1rem; font-weight:600; }
+
+/* submit button */
+.actions { margin-top:1rem; }
+.actions button {
+  min-height:48px;
+  padding:.7rem 1.2rem;
+  border:0; border-radius:10px;
+  background:#111; color:#fff; font-weight:600; cursor:pointer;
+}
+.actions button:disabled { opacity:.6; cursor:not-allowed; }
