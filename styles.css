@@ -1,11 +1,11 @@
 :root{
-    --primary: #D9A299;
-    --secondary: #F0E4D3;
-    --bg: #FAF7F3;
+    --primary: #9aa57c;
+    --secondary: #d4e3b7;
+    --bg: #F7F4EF;
     --surface: #ffffff;
-    --text: #333333;
-    --muted: #666666;
-    --border: #DCC5B2;
+    --text: #2E2C27;
+    --muted: #66635B;
+    --border: #DCD8CF;
 }
   
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -50,13 +50,13 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 1.5rem;
+    z-index: 1000
 }
 
 .brand {
     display: flex;
-    font-weight: 700;
-    letter-spacing: .5px;
-    line-height: 1;
+    width: 250px;
+    height: 70px;
 }
   
 
@@ -68,17 +68,17 @@ body {
 }
   
 #main-nav a {
-    color: #fff;
+    color: var(--secondary);
     text-decoration: none;
     padding: 0.4rem 0.7rem;
-    border-radius: 6px;
-    font-size: 1.05rem;
+    border-radius: 20px;
+    font-size: 1.5rem;
     transition: background-color .2s ease, color .2s ease;
 }
 
 #main-nav a:hover,
 #main-nav a:focus {
-    background-color: #fff;
+    background-color: var(--secondary);
     color: var(--primary);
     outline: none;
 }
@@ -90,7 +90,13 @@ main {
     padding: 2rem 2rem;
 }
   
-h1, h2 {
+h1 {
+    margin-bottom: 1rem;
+    font-size: 2rem;
+    color: var(--primary);
+}
+
+h2 {
     margin-bottom: 1rem;
 }
 
@@ -114,6 +120,61 @@ article ul {
 article li {
     margin-top: .25rem;
 }
+
+.features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+.features article {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1.5rem;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0,0,0,.05);
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.features article:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 16px rgba(0,0,0,.08);
+}
+
+.features h2 {
+  color: var(--primary);
+  margin-bottom: .5rem;
+  padding: 1rem
+}
+
+.feature-icon {
+  display: block;
+  margin: 2rem auto 2rem; /* space above/below */
+  width: 180px;
+  height: 180px;
+  object-fit: contain;
+  opacity: 0.9;
+  transition: transform .2s ease, opacity .2s ease;
+}
+
+.btn{
+    display: inline-block;
+    background-color: var(--primary);
+    color: #fff;
+    padding: 1rem 1.5rem;
+    margin-bottom: 2rem;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background-color .2s ease;
+}
+
+.btn:hover{
+    background-color: var(--secondary);
+    color: var(--primary);
+}
   
 /* ========== FOOTER ========== */
 
@@ -126,3 +187,160 @@ article li {
     padding: 1rem 0;
     font-size: 1rem;
 }
+
+/* ========== POSTS PAGE ========== */
+
+/* ---------- Status line ---------- */
+#status {
+  margin: 1rem 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+  min-height: 1.2em; /* keeps space even when empty */
+}
+
+/* ---------- Infinite scroll sentinel ---------- */
+#infinite-sentinel {
+  height: 1px;
+  width: 100%;
+  opacity: 0.001;      /* practically invisible */
+  pointer-events: none;
+  user-select: none;
+}
+
+/* ---------- Posts grid ---------- */
+#posts-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+/* ---------- Individual post card ---------- */
+#posts-list article {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 10px rgba(0,0,0,.05);
+  transition: transform .2s ease, box-shadow .2s ease;
+  position: relative; /* enables z-index on hover */
+  z-index: 0;
+}
+
+#posts-list article:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 14px rgba(0,0,0,.08);
+  z-index: 1;
+}
+
+#posts-list h2 {
+  margin-top: 0;
+  color: var(--text);
+}
+
+#posts-list .lead {
+  color: var(--muted);
+  font-size: 0.95rem;
+  margin: 0.25rem 0 0.75rem;
+}
+
+/* ---------- Tag list ---------- */
+#posts-list ul {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0.5rem 0 1rem;
+  padding: 0;
+}
+
+#posts-list ul li {
+  background: var(--secondary);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 0.25rem 0.6rem;
+  font-size: 0.85rem;
+  color: var(--text);
+}
+
+/* ---------- Comments ---------- */
+section[aria-label="Comments"] {
+  border-top: 1px dashed var(--border);
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+}
+
+section[aria-label="Comments"] h3 {
+  margin: 0 0 .4rem;
+  font-size: 1rem;
+  color: var(--muted);
+}
+
+section[aria-label="Comments"] ul {
+  margin-left: 1.2rem;
+  margin-top: .25rem;
+}
+
+/* ---------- Buttons / Username link ---------- */
+button {
+  font: inherit;
+  color: var(--text);
+  background: var(--secondary);
+  border: 1px solid var(--border);
+  border-radius: 15px;
+  padding: 0.4rem 0.8rem;
+  cursor: pointer;
+  transition: background-color .2s ease;
+}
+
+button:hover {
+  background: var(--primary);
+  color: #fff;
+}
+
+.username-link {
+  background: none;
+  border: none;
+  color: var(--primary);
+  cursor: pointer;
+  padding: 0;
+  font-weight: 600;
+  text-decoration: none;
+  transition: text-decoration-color .2s ease;
+}
+
+.username-link:hover,
+.username-link:focus {
+  background: none;
+  color: var(--secondary);
+  text-decoration-color: currentColor;
+  transition: text-decoration-color .2s ease;
+  outline: none;
+}
+/* ---------- User profile ---------- */
+#user-profile {
+  border: none;
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: 0 4px 20px rgba(0,0,0,.25);
+  padding: 1.5rem;
+  max-width: 32rem;
+  width: min(92vw, 32rem);
+  z-index: 10000;
+  position: fixed;
+}
+
+#user-profile::backdrop {
+  background: transparent;
+}
+
+#user-profile-body p {
+  margin: .4rem 0;
+}
+
+#user-profile-body strong {
+  color: var(--muted);
+}
+
+

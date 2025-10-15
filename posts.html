@@ -12,7 +12,7 @@
 
     <!-- HEADER -->
     <header class="site-header" role="banner">
-      <a class = "brand" aria-label="Museo Home">Museo</a>
+      <img src="assets/logo.png" class = "brand" alt="Museo logo" />
       <nav id="main-nav" role="navigation" aria-label="Main Navigation">
         <ul>
           <li><a href="index.html">Home</a></li>
@@ -23,20 +23,20 @@
     </header>
 
     <!-- MAIN CONTENT -->
-     <main id="content" tabindex="-1">
+     <main id="content">
       <header aria-labelledby="posts-title">
         <h1 id="posts-title">Posts</h1>
         <p class="lead">Stories, spotlights, and behind-the-scenes notes from the Museo team.</p>
       </header>
 
-      <p id="status" class="lead" aria-live="polite" style="min-height:1.5em;"></p>
+      <p id="status" class="lead" aria-live="polite"></p>
         
         <!-- Post cards-->
-      <section id="posts-list" aria-label="All posts" style="display:grid; gap:1.25rem;"></section>
+      <section id="posts-list" aria-label="All posts"></section>
         
         <!-- Pagination -->
-      <nav aria-label="Posts pagination" style="margin-top:1.25rem;">
-        <ul id="pagination" style="list-style:none; display:flex; gap:.5rem; align-items:center; flex-wrap:wrap;"></ul>
+      <nav aria-label="Posts pagination">
+        <ul id="pagination"></ul>
       </nav>
     </main>
 
@@ -48,12 +48,9 @@
 
   <dialog id="user-profile">
   <article>
-    <header style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem;">
+    <header>
       <h2 id="user-profile-title">User Profile</h2>
-      <button id="user-profile-close"
-              style="padding:.25rem .5rem;border:1px solid var(--border);border-radius:6px;background:var(--surface);cursor:pointer;">
-        Close
-      </button>
+      <button id="user-profile-close">Close</button>
     </header>
     <div id="user-profile-body" class="lead">Loading…</div>
   </article>

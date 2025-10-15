@@ -11,7 +11,7 @@
 <body>
 <div class="container">
     <header class="site-header">
-            <a class = "brand" aria-label="Museo Home">Museo</a>
+            <img src="assets/logo.png" class = "brand" alt="Museo logo" />
             <nav id="main-nav" role = "navigation" aria-label="Main Navigation">
                 <ul>
                     <li><a href="index.html">Home</a></li>
@@ -25,17 +25,30 @@
 
     <main>
         <section aria-labelledby="home-title">
-            <h1 id="home-title">Welcome to Museo</h1>
-            <p class="lead">Museo shows posts, comments and user's profiles from a public API</p>
-            <article>
-                <h2>What can you find in this website?</h2>
-                <ul>
-                    <li><strong>Posts</strong> with tags and comments.</li>
-                    <li><strong>User profiles</strong> via username click.</li>
-                    <li><strong>Contact</strong> form with validation.</li>
-                </ul>
-            </article>
+            <h1 id="home-title">Welcome to Museo! </h1>
         </section>
+        
+        <section class="features" aria-label="Key actions">
+            <article class="feature-card">
+                <h2>How It Works</h2>
+                <p class="lead">This is a read-only demo that displays posts from a public API.</p>
+                <img src="assets/question.png" class = "feature-icon" alt="Question mark" />
+             </article>
+
+            <article class="feature-card">
+                <h2>View Posts</h2>
+                <p class="lead">Explore community stories fetched from a public API.</p>
+                <img src="assets/browse.png" class = "feature-icon" alt="Illustration of a blog post" />
+                <a class="btn" href="posts.html" aria-label="Go to Posts page">Explore Posts</a>
+            </article>
+
+            <article class="feature-card">
+                <h2>Contact</h2>
+                <p class="lead">Questions or feedback? Reach out.</p>
+                <img src="assets/mail.png" class = "feature-icon" alt="Illustration of mail" />
+                <a class="btn" href="contact.html" aria-label="Go to Contact page">Contact Us</a>
+            </article>
+            </section>
     </main>
     
     <!-- FOOTER -->

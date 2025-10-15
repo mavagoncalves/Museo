@@ -1,24 +1,10 @@
-// Museo — Posts Page (DOM-only, no HTML strings, no CSS in JS)
-// Infinite scroll version (replaces pagination)
-
 const API_BASE = 'https://dummyjson.com';
 const PAGE_SIZE = 6;
 
-// ---------- DOM refs ----------
+// ---------- DOM REFS ----------
 const $ = (s, r = document) => r.querySelector(s);
 const postsList = $('#posts-list');
 const statusEl = $('#status');
-
-// Create (or reuse) an invisible sentinel to trigger loading more
-let sentinel = $('#infinite-sentinel');
-if (!sentinel) {
-  sentinel = document.createElement('div');
-  sentinel.id = 'infinite-sentinel';
-  // no styles in JS—HTML/CSS should keep this visually hidden if needed
-  (postsList?.parentNode || document.body).appendChild(sentinel);
-}
-
-// Optional user profile/dialog hooks
 const userProfile = $('#user-profile');
 const userProfileBody = $('#user-profile-body');
 $('#user-profile-close')?.addEventListener('click', () => {
@@ -26,63 +12,50 @@ $('#user-profile-close')?.addEventListener('click', () => {
   else userProfile?.removeAttribute('open');
 });
 
-// ---------- State / cache ----------
-let state = {
-  page: 1,
-  total: 0,
-  loaded: 0,
-  loading: false,
-  reachedEnd: false
-};
+// ---------- STATE ----------
+let state = { page: 1, total: 0, loaded: 0, loading: false, reachedEnd: false };
 const userCache = new Map();
 
-// ---------- Utils ----------
+// ---------- FETCHING ----------
 async function getJSON(url) {
   const res = await fetch(url);
   if (!res.ok) throw new Error(`HTTP ${res.status} for ${url}`);
   return res.json();
 }
-
 async function getPosts(page) {
   const skip = (page - 1) * PAGE_SIZE;
   return getJSON(`${API_BASE}/posts?limit=${PAGE_SIZE}&skip=${skip}`);
 }
-
 async function getUser(id) {
   if (userCache.has(id)) return userCache.get(id);
   const user = await getJSON(`${API_BASE}/users/${id}`);
   userCache.set(id, user);
   return user;
 }
-
 async function getComments(postId) {
   return getJSON(`${API_BASE}/comments/post/${postId}?limit=5`);
 }
 
-function clearNode(node) {
-  while (node?.firstChild) node.removeChild(node.firstChild);
-}
-
+// ---------- REACTIONS AND DATE ----------
+function clearNode(node) { while (node?.firstChild) node.removeChild(node.firstChild); }
 function reactionCount(post) {
   if (typeof post.reactions === 'number') return post.reactions;
   const r = post.reactions || {};
   return (r.likes || 0) + (r.dislikes || 0);
 }
-
 function pseudoDateFromId(id) {
   const base = new Date(2025, 0, 1);
   base.setDate(base.getDate() + (id % 180));
   return base.toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' });
 }
 
-// ---------- Comments ----------
+// ---------- RENDER COMMENTS ----------
 function renderComments(data) {
   const comments = data?.comments || [];
-
   const section = document.createElement('section');
   section.setAttribute('aria-label', 'Comments');
 
-  if (comments.length === 0) {
+  if (!comments.length) {
     const p = document.createElement('p');
     p.className = 'lead';
     p.textContent = 'No comments available.';
@@ -107,7 +80,7 @@ function renderComments(data) {
   return section;
 }
 
-// ---------- Post card ----------
+// ---------- POST CARD ----------
 function buildPostCard(post, user, commentsData) {
   const article = document.createElement('article');
 
@@ -128,7 +101,7 @@ function buildPostCard(post, user, commentsData) {
   userBtn.type = 'button';
   userBtn.className = 'username-link';
   userBtn.textContent = user?.username || `user-${post.userId}`;
-  userBtn.addEventListener('click', () => openUserProfile(post.userId));
+  userBtn.addEventListener('click', (e) => openUserProfile(post.userId, e));
 
   byline.appendChild(userBtn);
 
@@ -156,16 +129,14 @@ function buildPostCard(post, user, commentsData) {
   return article;
 }
 
-// ---------- User Profile (dialog) ----------
-async function openUserProfile(userId) {
+// ---------- USER PROFILE ----------
+async function openUserProfile(userId, e) {
   if (!userProfile || !userProfileBody) return;
 
-  clearNode(userProfileBody);
-  userProfileBody.appendChild(document.createTextNode('Loading...'));
-
+  userProfileBody.textContent = 'Loading...';
   try {
     const u = await getUser(userId);
-    clearNode(userProfileBody);
+    userProfileBody.textContent = '';
 
     const fields = [
       ['Name', `${u.firstName ?? ''} ${u.lastName ?? ''}`.trim() || u.username],
@@ -175,7 +146,7 @@ async function openUserProfile(userId) {
       ['Phone', u.phone || '—']
     ];
 
-    fields.forEach(([label, value]) => {
+    for (const [label, value] of fields) {
       const p = document.createElement('p');
       const strong = document.createElement('strong');
       strong.textContent = `${label}: `;
@@ -190,24 +161,40 @@ async function openUserProfile(userId) {
         p.appendChild(document.createTextNode(value));
       }
       userProfileBody.appendChild(p);
+    }
+    // placement of the user profile
+    if (typeof userProfile.show === 'function') userProfile.show();
+    else userProfile.setAttribute('open', '');
+
+    const GAP = 8;
+    const x = (e?.clientX ?? window.innerWidth / 2) + GAP;
+    const y = (e?.clientY ?? window.innerHeight / 2) + GAP;
+
+    userProfile.style.position = 'fixed';
+    userProfile.style.margin = '0';
+
+    requestAnimationFrame(() => {
+      const w = userProfile.offsetWidth || 300;
+      const h = userProfile.offsetHeight || 200;
+      const left = Math.min(x, window.innerWidth - w - GAP);
+      const top = Math.min(y, window.innerHeight - h - GAP);
+      userProfile.style.left = `${Math.max(GAP, left)}px`;
+      userProfile.style.top = `${Math.max(GAP, top)}px`;
     });
   } catch {
-    clearNode(userProfileBody);
-    const p = document.createElement('p');
-    p.className = 'lead';
-    p.textContent = 'Failed to load user profile.';
-    userProfileBody.appendChild(p);
+    userProfileBody.textContent = 'Failed to load user profile.';
+    if (typeof userProfile.show === 'function') userProfile.show();
+    else userProfile.setAttribute('open', '');
   }
-
-  if (typeof userProfile.showModal === 'function') userProfile.showModal();
-  else userProfile.setAttribute('open', '');
 }
 
-// ---------- Infinite Load ----------
+// ---------- INFINITE SCROLL ----------
+let sentinel;
+let observer;
+
 async function loadNextPage() {
   if (state.loading || state.reachedEnd) return;
   state.loading = true;
-
   if (statusEl) statusEl.textContent = state.page === 1 ? 'Loading posts...' : 'Loading more...';
 
   try {
@@ -221,7 +208,7 @@ async function loadNextPage() {
       })
     );
 
-    if ((posts?.length || 0) === 0 && state.page === 1) {
+    if (!posts?.length && state.page === 1) {
       const article = document.createElement('article');
       const h2 = document.createElement('h2');
       h2.textContent = 'No posts found';
@@ -236,16 +223,15 @@ async function loadNextPage() {
       cards.forEach(card => postsList.appendChild(card));
       state.loaded += posts?.length || 0;
 
-      // If we loaded fewer than PAGE_SIZE or reached total, stop
       if ((posts?.length || 0) < PAGE_SIZE || (state.total && state.loaded >= state.total)) {
         state.reachedEnd = true;
-        observerDisconnect(); // stop observing—no more pages
+        observer?.disconnect();
+        sentinel?.remove();
       } else {
-        state.page += 1; // prepare next page
+        state.page += 1;
       }
     }
   } catch (e) {
-    // Show lightweight error block (without clearing previous items)
     const article = document.createElement('article');
     const h2 = document.createElement('h2');
     h2.textContent = 'Couldn’t load more posts';
@@ -255,7 +241,6 @@ async function loadNextPage() {
     article.appendChild(h2);
     article.appendChild(p);
     postsList.appendChild(article);
-    // Do not mark reachedEnd; allow retry by scrolling again
     console.error(e);
   } finally {
     if (statusEl) statusEl.textContent = '';
@@ -263,59 +248,27 @@ async function loadNextPage() {
   }
 }
 
-// ---------- IntersectionObserver wiring ----------
-let io = null;
+function initInfiniteScroll() {
+  sentinel = document.createElement('div');
+  sentinel.id = 'sentinel';
+  postsList.insertAdjacentElement('afterend', sentinel);
 
-function observerConnect() {
-  if (!('IntersectionObserver' in window)) {
-    // Fallback: basic scroll listener (throttled)
-    window.addEventListener('scroll', onScrollFallback, { passive: true });
-    return;
-  }
+  observer = new IntersectionObserver((entries) => {
+    if (entries[0].isIntersecting) loadNextPage();
+  }, { rootMargin: '400px 0px' });
 
-  if (io) io.disconnect();
-  io = new IntersectionObserver((entries) => {
-    for (const entry of entries) {
-      if (entry.isIntersecting) {
-        loadNextPage();
-      }
-    }
-  }, {
-    root: null,
-    rootMargin: '600px 0px', // prefetch when within 600px of viewport
-    threshold: 0
-  });
-
-  io.observe(sentinel);
+  observer.observe(sentinel);
 }
 
-function observerDisconnect() {
-  if (io) io.disconnect();
-  window.removeEventListener('scroll', onScrollFallback);
-}
-
-// Fallback scroll handler
-let ticking = false;
-function onScrollFallback() {
-  if (ticking) return;
-  ticking = true;
-  requestAnimationFrame(() => {
-    const rect = sentinel.getBoundingClientRect();
-    if (rect.top <= (window.innerHeight + 600)) {
-      loadNextPage();
-    }
-    ticking = false;
-  });
-}
-
-// ---------- Init ----------
 function resetAndStart() {
   state = { page: 1, total: 0, loaded: 0, loading: false, reachedEnd: false };
   clearNode(postsList);
   if (statusEl) statusEl.textContent = '';
-  observerConnect();
+
+  initInfiniteScroll();
   loadNextPage();
 }
 
 document.addEventListener('DOMContentLoaded', resetAndStart);
+
 
