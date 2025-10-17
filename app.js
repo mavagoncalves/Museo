@@ -95,7 +95,7 @@ async function loadNextPage(){
     }
   }catch(e){
     const a=document.createElement('article'), h=document.createElement('h2'), p=document.createElement('p');
-    h.textContent='Couldn’t load more posts'; p.className='lead'; p.textContent='Check your connection and try again.'; a.appendChild(h); a.appendChild(p); postsList.appendChild(a); console.error(e);
+    h.textContent='Couldn´t load more posts'; p.className='lead'; p.textContent='Check your connection and try again.'; a.appendChild(h); a.appendChild(p); postsList.appendChild(a); console.error(e);
   }finally{ if(statusEl) statusEl.textContent=''; state.loading=false; }
 }
 
